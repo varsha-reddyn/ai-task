@@ -1,0 +1,16 @@
+{
+  "fields": [
+    {
+      "label": "API Error",
+      "value": "Hugging Face API returned an error"
+    },
+    {
+      "label": "Details",
+      "value": "{\"error\":\"https://api-inference.huggingface.co is no longer supported. Please use https://router.huggingface.co/hf-inference instead.\"}"
+    },
+    {
+      "label": "Status Code",
+      "value": "410"
+    }
+  ]
+}

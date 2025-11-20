@@ -1,0 +1,16 @@
+{
+  "fields": [
+    {
+      "label": "Demo Field 1",
+      "value": "Sample Value 1"
+    },
+    {
+      "label": "Demo Field 2",
+      "value": "Sample Value 2"
+    },
+    {
+      "label": "Note",
+      "value": "Set HUGGINGFACE_API_KEY for real AI extraction"
+    }
+  ]
+}

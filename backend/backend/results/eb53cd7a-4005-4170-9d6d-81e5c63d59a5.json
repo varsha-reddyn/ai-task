@@ -1,0 +1,12 @@
+{
+  "fields": [
+    {
+      "label": "Error",
+      "value": "API returned status 410"
+    },
+    {
+      "label": "Demo Field",
+      "value": "Using fallback data"
+    }
+  ]
+}

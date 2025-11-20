@@ -1,0 +1,20 @@
+{
+  "fields": [
+    {
+      "label": "Purpose of JavaScript",
+      "value": "JavaScript's primary purpose is to enable client-side scripting on web pages. This means it allows developers to manipulate the content and behavior of web pages directly within the user's web browser."
+    },
+    {
+      "label": "Purpose of JavaScript (continued)",
+      "value": "With JavaScript, we can dynamically update web pages elements, validate form inputs, and respond to user interactions like clicks, mouse movements and keyboard input."
+    },
+    {
+      "label": "Purpose of JavaScript (continued)",
+      "value": "Additionally, JavaScript can interact with web servers through AJAX (Asynchronous JavaScript and XML) to fetch data without requiring a page reload."
+    },
+    {
+      "label": "Copyrighted by",
+      "value": "CodeWithCurious.com"
+    }
+  ]
+}

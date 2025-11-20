@@ -1,0 +1,16 @@
+{
+  "fields": [
+    {
+      "label": "API Error",
+      "value": "Hugging Face API returned an error"
+    },
+    {
+      "label": "Details",
+      "value": "{\"detail\":[{\"type\":\"string_type\",\"loc\":[\"body\",\"messages\",0,\"content\",\"str\"],\"msg\":\"Input should be a valid string\",\"input\":[{\"type\":\"input_text\",\"text\":\"You are an AI expert at reading and extracting"
+    },
+    {
+      "label": "Status Code",
+      "value": "422"
+    }
+  ]
+}

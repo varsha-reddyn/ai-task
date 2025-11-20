@@ -1,0 +1,211 @@
+Build a complete full-stack application based on the following requirements:
+
+📝 PROJECT: Handwritten Form Extraction System (with CRUD API)
+🎯 Goal
+
+Create a full-stack web application where users upload handwritten forms (images/PDF), the backend uses Hugging Face Qwen2.5-VL-7B-VL model to extract text, and users can view, edit, update, and delete extracted records.
+
+FRONTEND REQUIREMENTS (React + Vite)
+Features
+
+Page to upload handwritten form (png, jpg, jpeg, pdf)
+
+Display:
+
+Upload progress bar
+
+Uploaded image preview
+
+Extracted result (table + JSON viewer toggler)
+
+CRUD UI:
+
+List all extracted records
+
+View a single extracted record
+
+Edit/update (inline table editing or separate form)
+
+Delete a record
+
+Buttons:
+
+Download JSON
+
+Download CSV
+
+Use:
+
+React
+
+Axios
+
+TailwindCSS (optional)
+
+JSON viewer component
+
+Frontend API Calls
+
+POST /upload
+
+GET /result/{task_id}
+
+CRUD:
+
+GET /records
+
+GET /records/{id}
+
+PUT /records/{id}
+
+DELETE /records/{id}
+
+BACKEND REQUIREMENTS (Python + FastAPI)
+API Endpoints
+1. Upload & Extract
+
+POST /upload
+
+Accept file upload
+
+Save file in /uploads
+
+Trigger AI model
+
+Save structured JSON in /results/<task_id>.json
+
+Save data into DB
+
+Return { task_id }
+
+2. Get Result
+
+GET /result/{task_id}
+
+CRUD ENDPOINTS (MUST BE IMPLEMENTED)
+3. List all extracted records
+
+GET /records
+Return all extracted records from the database.
+
+4. Get single record
+
+GET /records/{id}
+
+5. Update extracted record
+
+PUT /records/{id}
+Allow editing field values or labels.
+
+6. Delete a record
+
+DELETE /records/{id}
+
+DATABASE REQUIREMENT
+
+Use SQLite (simple, file-based, ideal for Replit).
+
+Tables
+
+records
+
+id (primary key)
+
+raw_json (TEXT)
+
+created_at
+
+updated_at
+
+AI MODEL REQUIREMENTS
+Use Hugging Face Vision-Language Model
+
+Qwen2.5-VL-7B-Instruct (or similar)
+
+EXTRACTION PROMPT (USE EXACT TEXT)
+You are an AI Agent designed to extract information from handwritten forms.
+
+TASK:
+Analyze the uploaded handwritten form image and extract all fields and values accurately.
+
+REQUIRED OUTPUT FORMAT (STRICT JSON):
+{
+  "fields": [
+    {
+       "label": "<Field Label>",
+       "value": "<Extracted Handwritten Value>"
+    }
+  ]
+}
+
+RULES:
+- Extract all text clearly.
+- Keep original meaning.
+- If unreadable, set value to "unreadable".
+- Do not hallucinate information.
+- Return JSON only without explanations.
+
+BACKEND LOGIC
+
+Save uploaded file
+
+Preprocess image
+
+Send to Hugging Face VL model with the prompt
+
+Parse JSON safely
+
+Save JSON to /results/<task_id>.json
+
+Insert record into SQLite
+
+CRUD operations read/write to DB
+
+PROJECT STRUCTURE (Replit must generate)
+/frontend
+/backend
+    /uploads
+    /results
+    database.db
+
+LIBRARIES TO INSTALL
+Backend
+
+fastapi
+
+uvicorn
+
+python-multipart
+
+pillow
+
+transformers
+
+torch
+
+sqlite3 (built-in)
+
+Frontend
+
+react
+
+react-dom
+
+axios
+
+vite
+
+tailwindcss (optional)
+
+FINAL OUTPUT REQUIRED
+
+Replit must generate a fully working project:
+
+✔️ Upload + AI Extraction working
+✔️ Qwen2.5-VL-7B model integrated
+✔️ Clean JSON extraction
+✔️ CRUD backend (SQLite)
+✔️ CRUD UI on frontend
+✔️ Download JSON/CSV
+✔️ Beautiful UI
+✔️ End-to-end working system

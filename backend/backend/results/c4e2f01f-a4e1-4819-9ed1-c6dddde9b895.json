@@ -1,0 +1,16 @@
+{
+  "fields": [
+    {
+      "label": "API Error",
+      "value": "Hugging Face API returned an error"
+    },
+    {
+      "label": "Details",
+      "value": "Not Found"
+    },
+    {
+      "label": "Status Code",
+      "value": "404"
+    }
+  ]
+}

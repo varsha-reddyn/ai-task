@@ -1,0 +1,80 @@
+{
+  "fields": [
+    {
+      "label": "From",
+      "value": "VAALJAPIE STASIE RESTAURANT 044 - 895576"
+    },
+    {
+      "label": "Date",
+      "value": "11/03/05"
+    },
+    {
+      "label": "To",
+      "value": "Marlene"
+    },
+    {
+      "label": "Quantity",
+      "value": "9x"
+    },
+    {
+      "label": "Description",
+      "value": "Orange Juice"
+    },
+    {
+      "label": "Description",
+      "value": "Seemanspakkie"
+    },
+    {
+      "label": "Description",
+      "value": "Braeelslaai"
+    },
+    {
+      "label": "Description",
+      "value": "Haarkrullers"
+    },
+    {
+      "label": "Description",
+      "value": "Soalsak"
+    },
+    {
+      "label": "Unit Price",
+      "value": "16,00"
+    },
+    {
+      "label": "Unit Price",
+      "value": "28,75"
+    },
+    {
+      "label": "Unit Price",
+      "value": "30,90"
+    },
+    {
+      "label": "Unit Price",
+      "value": "7,50"
+    },
+    {
+      "label": "Unit Price",
+      "value": "54,70"
+    },
+    {
+      "label": "Amount",
+      "value": "16,00"
+    },
+    {
+      "label": "Amount",
+      "value": "28,75"
+    },
+    {
+      "label": "Amount",
+      "value": "30,90"
+    },
+    {
+      "label": "Amount",
+      "value": "7,50"
+    },
+    {
+      "label": "Amount",
+      "value": "54,70"
+    }
+  ]
+}

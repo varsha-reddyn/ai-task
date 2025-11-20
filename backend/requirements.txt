@@ -1,0 +1,9 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+pillow
+
+huggingface-hub==0.19.4
+requests==2.31.0
+pdf2image==1.16.3
+python-dotenv==1.0.0
