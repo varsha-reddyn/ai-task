@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import ReactJson from 'react-json-view'
 
+// Configuration for API URL
+// 1. Uses VITE_API_URL from .env if defined (e.g. http://16.112.64.187:8000)
+// 2. Falls back to relative path '' in production (uses Docker/Nginx proxy)
+// 3. Falls back to localhost:8000 in development
+const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:8000')
+
 function App() {
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
@@ -20,9 +26,7 @@ function App() {
 
   const fetchRecords = async () => {
     try {
-      // Direct backend URL for local development since proxy might be flaky
-      const backendUrl = import.meta.env.PROD ? '/records' : 'http://localhost:8000/records'
-      const response = await axios.get(`${backendUrl}?t=${new Date().getTime()}`) 
+      const response = await axios.get(`${API_BASE_URL}/records?t=${new Date().getTime()}`) 
       if (response.data && Array.isArray(response.data.records)) {
          setRecords(response.data.records)
       } else {
@@ -75,10 +79,7 @@ function App() {
     setUploadProgress(0)
 
     try {
-      // Direct backend URL for local development
-      const backendUrl = import.meta.env.PROD ? '/upload' : 'http://localhost:8000/upload'
-      
-      const response = await axios.post(backendUrl, formData, {
+      const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -88,8 +89,7 @@ function App() {
         },
       })
 
-      const resultUrl = import.meta.env.PROD ? `/result/${response.data.task_id}` : `http://localhost:8000/result/${response.data.task_id}`
-      const result = await axios.get(resultUrl)
+      const result = await axios.get(`${API_BASE_URL}/result/${response.data.task_id}`)
       setCurrentResult(result.data)
       await fetchRecords()
       setActiveTab('results')
@@ -109,8 +109,7 @@ function App() {
     }
 
     try {
-      const backendUrl = import.meta.env.PROD ? `/records/${recordId}` : `http://localhost:8000/records/${recordId}`
-      await axios.delete(backendUrl)
+      await axios.delete(`${API_BASE_URL}/records/${recordId}`)
       await fetchRecords()
       if (selectedRecord?.id === recordId) {
         setSelectedRecord(null)
@@ -135,15 +134,13 @@ function App() {
     if (!editingRecord) return
 
     try {
-      const backendUrl = import.meta.env.PROD ? `/records/${editingRecord.id}` : `http://localhost:8000/records/${editingRecord.id}`
-      await axios.put(backendUrl, {
+      await axios.put(`${API_BASE_URL}/records/${editingRecord.id}`, {
         raw_json: editingRecord.raw_json
       })
       await fetchRecords()
       setEditingRecord(null)
       if (selectedRecord?.id === editingRecord.id) {
-        const updatedUrl = import.meta.env.PROD ? `/records/${editingRecord.id}` : `http://localhost:8000/records/${editingRecord.id}`
-        const updated = await axios.get(updatedUrl)
+        const updated = await axios.get(`${API_BASE_URL}/records/${editingRecord.id}`)
         setSelectedRecord(updated.data)
       }
     } catch (error) {
