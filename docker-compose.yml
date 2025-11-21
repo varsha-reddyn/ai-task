@@ -13,7 +13,6 @@ services:
     volumes:
       - ./backend/uploads:/app/uploads
       - ./backend/results:/app/results
-      # Mount ONLY app code — NOT the entire backend folder inside /app
       - ./backend:/app
     ports:
       - "9000:8000"
