@@ -3,10 +3,11 @@ import axios from 'axios'
 import ReactJson from 'react-json-view'
 
 // Configuration for API URL
-// 1. Uses VITE_API_URL from .env if defined (e.g. http://16.112.64.187:8000)
-// 2. Falls back to relative path '' in production (uses Docker/Nginx proxy)
-// 3. Falls back to localhost:8000 in development
-const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:8000')
+// 1. Uses VITE_API_URL from .env or build arg
+// 2. Defaults to localhost:9000 for local dev if not set
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:9000'
+
+console.log('Current API URL:', API_BASE_URL) // Log to debug
 
 function App() {
   const [file, setFile] = useState(null)
