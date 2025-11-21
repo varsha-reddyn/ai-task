@@ -5,7 +5,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install system deps required by some Python packages (pdf2image needs poppler)
+# Install system deps required by some Python packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        build-essential \
@@ -18,6 +18,11 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY backend/ /app/
 
+# Copy and make the start script executable
+COPY backend/start.sh /app/start.sh
+RUN chmod +x /app/start.sh || true
+
 EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Use the start script to ensure DB and folders exist before starting
+ENTRYPOINT ["sh", "/app/start.sh"]

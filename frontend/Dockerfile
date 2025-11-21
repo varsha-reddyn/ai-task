@@ -1,17 +1,29 @@
-## Build stage
-## Use a Debian-based Node image to ensure `npm` and build tooling are available
-FROM node:18-bullseye-slim AS builder
+# Build stage
+FROM node:18-slim AS build
+
 WORKDIR /app
 
-COPY frontend/package*.json ./
-# Use npm install with legacy-peer-deps to avoid ERESOLVE failures inside the builder
-RUN npm install --legacy-peer-deps --no-audit --no-fund
+# Copy package files
+COPY frontend/package.json frontend/package-lock.json ./
 
-COPY frontend/ ./
+# Install dependencies
+RUN npm ci --legacy-peer-deps
+
+# Copy source code
+COPY frontend/ .
+
+# Build the app
 RUN npm run build
 
-## Production stage - serve built files with nginx
-FROM nginx:stable-alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Production stage
+FROM nginx:alpine
+
+# Copy built app from build stage
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]

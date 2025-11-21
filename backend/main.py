@@ -40,8 +40,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-UPLOAD_DIR = "backend/uploads"
-RESULTS_DIR = "backend/results"
+@app.middleware("http")
+async def add_no_cache_header(request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
+RESULTS_DIR = os.path.join(BASE_DIR, "results")
 HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/Qwen/Qwen2.5-VL-7B-Instruct"
 
 EXTRACTION_PROMPT = """You are an AI expert at reading and extracting information from handwritten forms and documents.
@@ -78,8 +87,29 @@ class UpdateRecordRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    """Root endpoint."""
-    return {"message": "Handwritten Form Extraction API", "status": "running"}
+    """Root endpoint with health check."""
+    db_status = "connected"
+    db_error = None
+    try:
+        import sqlite3
+        from database import DATABASE_PATH
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1")
+        conn.close()
+    except Exception as e:
+        db_status = "disconnected"
+        db_error = str(e)
+        
+    return {
+        "message": "Handwritten Form Extraction API", 
+        "status": "running",
+        "database": {
+            "status": db_status,
+            "path": DATABASE_PATH,
+            "error": db_error
+        }
+    }
 
 def initialize_app():
     """Initialize application on startup."""
@@ -144,13 +174,13 @@ def extract_text_from_image(image_path: str) -> Dict[str, Any]:
     Extract text from handwritten form using Hugging Face Qwen2-VL model.
     Dynamically creates fields based on what the AI sees in the image.
     """
-    # Read API key from environment; prefer `HUGGINGFACE_API_KEY` but allow common alternatives
-    hf_token = os.environ.get("HUGGINGFACE_API_KEY") or os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_API_KEY")
-
-    if not hf_token:
-        raise ValueError("HUGGINGFACE_API_KEY not found. Please configure your API key in a local .env or environment variable.")
-    
     try:
+        # Read API key from environment; prefer `HUGGINGFACE_API_KEY` but allow common alternatives
+        hf_token = os.environ.get("HUGGINGFACE_API_KEY") or os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_API_KEY")
+
+        if not hf_token:
+            raise ValueError("HUGGINGFACE_API_KEY not found. Please configure your API key in a local .env or environment variable.")
+    
         with Image.open(image_path) as img:
             if img.mode != 'RGB':
                 img = img.convert('RGB')

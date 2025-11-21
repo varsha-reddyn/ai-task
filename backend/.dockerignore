@@ -1,3 +1,13 @@
+# Backend dockerignore
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+env/
+*.db
+.env
 __pycache__/
 *.pyc
 *.pyo

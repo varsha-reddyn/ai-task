@@ -20,8 +20,16 @@ function App() {
 
   const fetchRecords = async () => {
     try {
-      const response = await axios.get('/records')
-      setRecords(response.data.records)
+      const response = await axios.get('/records?t=' + new Date().getTime()) // Prevent caching
+      if (response.data && Array.isArray(response.data.records)) {
+         setRecords(response.data.records)
+      } else {
+         console.error('Invalid records format:', response.data)
+         // If we got HTML instead of JSON (e.g. Nginx routing issue), alert the user
+         if (typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
+            console.error('Received HTML instead of JSON. Nginx routing issue likely.')
+         }
+      }
     } catch (error) {
       console.error('Error fetching records:', error)
     }
@@ -85,7 +93,8 @@ function App() {
       setActiveTab('results')
     } catch (error) {
       console.error('Error uploading file:', error)
-      alert('Error uploading file. Please try again.')
+      const errorMessage = error.response?.data?.detail || error.message || 'Error uploading file. Please try again.'
+      alert(errorMessage)
     } finally {
       setUploading(false)
       setUploadProgress(0)
