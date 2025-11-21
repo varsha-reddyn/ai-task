@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: handwritten_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+      - ./.env
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/results:/app/results
+      - ./backend:/app/backend    # <-- backend folder mounted (includes database.db)
+    ports:
+      - "9000:8000"   # host:container
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: handwritten_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend

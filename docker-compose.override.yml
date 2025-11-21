@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  frontend:
+    image: node:18-bullseye-slim
+    container_name: handwritten_frontend
+    working_dir: /app
+    command: sh -c "npm install --legacy-peer-deps && npm run dev -- --host 0.0.0.0 --port 5000"
+    volumes:
+      - ./HandwrittenNotes/frontend:/app
+      - /app/node_modules
+    ports:
+      - "5000:5000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - VITE_BACKEND_URL=http://backend:8000
+      - HUGGINGFACE_API_KEY=hf_32456hf_vgAIFSYPoLBEozCNXhlNhYAqmymmIYaSyJ
+      - HF_TOKEN=hf_3245678901234567890123456789012345678901
+    depends_on:
+      - backend
+
+  # backend override removed to avoid duplicating build context/dockerfile paths
+  # Use the backend build defined in the root docker-compose.yml
+
+volumes:
+  uploads:
+  results:
