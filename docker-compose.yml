@@ -22,7 +22,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: ${VITE_API_URL:-http://16.112.64.187:8000}
+        # Point to the external IP and the exposed backend port (9000)
+        VITE_API_URL: ${VITE_API_URL:-http://16.112.64.187:9000}
     container_name: handwritten_frontend
     restart: unless-stopped
     ports:
