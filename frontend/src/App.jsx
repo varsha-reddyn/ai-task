@@ -20,15 +20,13 @@ function App() {
 
   const fetchRecords = async () => {
     try {
-      const response = await axios.get('/records?t=' + new Date().getTime()) // Prevent caching
+      // Direct backend URL for local development since proxy might be flaky
+      const backendUrl = import.meta.env.PROD ? '/records' : 'http://localhost:8000/records'
+      const response = await axios.get(`${backendUrl}?t=${new Date().getTime()}`) 
       if (response.data && Array.isArray(response.data.records)) {
          setRecords(response.data.records)
       } else {
          console.error('Invalid records format:', response.data)
-         // If we got HTML instead of JSON (e.g. Nginx routing issue), alert the user
-         if (typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
-            console.error('Received HTML instead of JSON. Nginx routing issue likely.')
-         }
       }
     } catch (error) {
       console.error('Error fetching records:', error)
@@ -77,7 +75,10 @@ function App() {
     setUploadProgress(0)
 
     try {
-      const response = await axios.post('/upload', formData, {
+      // Direct backend URL for local development
+      const backendUrl = import.meta.env.PROD ? '/upload' : 'http://localhost:8000/upload'
+      
+      const response = await axios.post(backendUrl, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -87,7 +88,8 @@ function App() {
         },
       })
 
-      const result = await axios.get(`/result/${response.data.task_id}`)
+      const resultUrl = import.meta.env.PROD ? `/result/${response.data.task_id}` : `http://localhost:8000/result/${response.data.task_id}`
+      const result = await axios.get(resultUrl)
       setCurrentResult(result.data)
       await fetchRecords()
       setActiveTab('results')
@@ -107,7 +109,8 @@ function App() {
     }
 
     try {
-      await axios.delete(`/records/${recordId}`)
+      const backendUrl = import.meta.env.PROD ? `/records/${recordId}` : `http://localhost:8000/records/${recordId}`
+      await axios.delete(backendUrl)
       await fetchRecords()
       if (selectedRecord?.id === recordId) {
         setSelectedRecord(null)
@@ -132,13 +135,15 @@ function App() {
     if (!editingRecord) return
 
     try {
-      await axios.put(`/records/${editingRecord.id}`, {
+      const backendUrl = import.meta.env.PROD ? `/records/${editingRecord.id}` : `http://localhost:8000/records/${editingRecord.id}`
+      await axios.put(backendUrl, {
         raw_json: editingRecord.raw_json
       })
       await fetchRecords()
       setEditingRecord(null)
       if (selectedRecord?.id === editingRecord.id) {
-        const updated = await axios.get(`/records/${editingRecord.id}`)
+        const updatedUrl = import.meta.env.PROD ? `/records/${editingRecord.id}` : `http://localhost:8000/records/${editingRecord.id}`
+        const updated = await axios.get(updatedUrl)
         setSelectedRecord(updated.data)
       }
     } catch (error) {
