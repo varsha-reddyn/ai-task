@@ -13,16 +13,17 @@ RUN apt-get update \
        poppler-utils \
     && rm -rf /var/lib/apt/lists/*
 
-COPY backend/requirements.txt /app/requirements.txt
+# Copy requirements file (Dockerfile already inside backend/)
+COPY requirements.txt /app/requirements.txt
+
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-COPY backend/ /app/
+# Copy entire backend directory
+COPY . /app/
 
-# Copy and make the start script executable
-COPY backend/start.sh /app/start.sh
-RUN chmod +x /app/start.sh || true
+# Fix permissions for start script
+RUN chmod +x /app/start.sh
 
 EXPOSE 8000
 
-# Use the start script to ensure DB and folders exist before starting
 ENTRYPOINT ["sh", "/app/start.sh"]
