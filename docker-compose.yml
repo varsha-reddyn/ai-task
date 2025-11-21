@@ -13,9 +13,10 @@ services:
     volumes:
       - ./backend/uploads:/app/uploads
       - ./backend/results:/app/results
-      - ./backend:/app/backend    # <-- backend folder mounted (includes database.db)
+      # Mount ONLY app code — NOT the entire backend folder inside /app
+      - ./backend:/app
     ports:
-      - "9000:8000"   # host:container
+      - "9000:8000"
 
   frontend:
     build:
