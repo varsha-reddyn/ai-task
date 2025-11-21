@@ -13,7 +13,7 @@ services:
     volumes:
       - ./backend/uploads:/app/uploads
       - ./backend/results:/app/results
-      - ./backend:/app
+      - ./backend/database.db:/app/database.db   # Mount only DB
     ports:
       - "9000:8000"
 
@@ -27,3 +27,4 @@ services:
       - "3000:80"
     depends_on:
       - backend
+    command: ["nginx", "-g", "daemon off;"]   # IMPORTANT: run only Nginx
